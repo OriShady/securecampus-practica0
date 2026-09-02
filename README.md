@@ -12,3 +12,7 @@ Diseñar, construir, asegurar, probar y documentar una aplicación aplicando pr�
 - Orion Sara Hernandez
 - Integrante 3
 - Integrante 4
+
+## Seguridad
+
+SecureCampus será desarrollado siguiendo prácticas de Secure SDLC.
