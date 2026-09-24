@@ -1,0 +1,89 @@
+[1mdiff --git a/src/app.py b/src/app.py[m
+[1mnew file mode 100644[m
+[1mindex 0000000..e0a616d[m
+[1m--- /dev/null[m
+[1m+++ b/src/app.py[m
+[36m@@ -0,0 +1,23 @@[m
+[32m+[m[32mimport sqlite3[m
+[32m+[m
+[32m+[m
+[32m+[m[32mdef buscar_estudiante(nombre):[m
+[32m+[m[32m    conexion = sqlite3.connect("securecampus.db")[m
+[32m+[m[32m    cursor = conexion.cursor()[m
+[32m+[m
+[32m+[m[32m    consulta = ([m
+[32m+[m[32m        "SELECT id, nombre, correo "[m
+[32m+[m[32m        "FROM estudiantes "[m
+[32m+[m[32m        "WHERE nombre = '" + nombre + "'"[m
+[32m+[m[32m    )[m
+[32m+[m
+[32m+[m[32m    cursor.execute(consulta)[m
+[32m+[m
+[32m+[m[32m    resultado = cursor.fetchall()[m
+[32m+[m[32m    conexion.close()[m
+[32m+[m
+[32m+[m[32m    return resultado[m
+[32m+[m[32mnombre = input("Nombre del estudiante: ")[m
+[32m+[m[32mestudiantes = buscar_estudiante(nombre)[m
+[32m+[m
+[32m+[m[32mprint(estudiantes)[m
+[1mdiff --git a/src/webapp.py b/src/webapp.py[m
+[1mnew file mode 100644[m
+[1mindex 0000000..70eb113[m
+[1m--- /dev/null[m
+[1m+++ b/src/webapp.py[m
+[36m@@ -0,0 +1,54 @@[m
+[32m+[m[32mfrom flask import Flask, request, render_template_string[m
+[32m+[m
+[32m+[m[32mapp = Flask(__name__)[m
+[32m+[m
+[32m+[m[32mHTML = """[m
+[32m+[m[32m<!DOCTYPE html>[m
+[32m+[m[32m<html lang="es">[m
+[32m+[m[32m<head>[m
+[32m+[m[32m    <meta charset="UTF-8">[m
+[32m+[m[32m    <title>SecureCampus Security Lab</title>[m
+[32m+[m[32m</head>[m
+[32m+[m[32m<body>[m
+[32m+[m[32m    <h1>SecureCampus</h1>[m
+[32m+[m[32m    <h2>Security Lab</h2>[m
+[32m+[m
+[32m+[m[32m    <p>Aplicación local para prácticas de Desarrollo Seguro.</p>[m
+[32m+[m
+[32m+[m[32m    <form method="GET" action="/buscar">[m
+[32m+[m[32m        <label for="nombre">Buscar estudiante:</label>[m
+[32m+[m[32m        <input type="text" id="nombre" name="nombre">[m
+[32m+[m[32m        <button type="submit">Buscar</button>[m
+[32m+[m[32m    </form>[m
+[32m+[m[32m</body>[m
+[32m+[m[32m</html>[m
+[32m+[m[32m"""[m
+[32m+[m
+[32m+[m
+[32m+[m[32m@app.route("/")[m
+[32m+[m[32mdef inicio():[m
+[32m+[m[32m    return render_template_string(HTML)[m
+[32m+[m
+[32m+[m
+[32m+[m[32m@app.route("/buscar")[m
+[32m+[m[32mdef buscar():[m
+[32m+[m[32m    nombre = request.args.get("nombre", "")[m
+[32m+[m
+[32m+[m[32m    resultado_html = """[m
+[32m+[m[32m    <html>[m
+[32m+[m[32m        <head>[m
+[32m+[m[32m            <title>Resultado - SecureCampus</title>[m
+[32m+[m[32m        </head>[m
+[32m+[m[32m        <body>[m
+[32m+[m[32m            <h1>Resultado de búsqueda</h1>[m
+[32m+[m[32m            <p>Estudiante buscado: {{ nombre }}</p>[m
+[32m+[m[32m            <a href="/">Regresar</a>[m
+[32m+[m[32m        </body>[m
+[32m+[m[32m    </html>[m
+[32m+[m[32m    """[m
+[32m+[m
+[32m+[m[32m    return f"""... <p>Estudiante buscado: {nombre}</p> ..."""[m
+[32m+[m
+[32m+[m
+[32m+[m[32mif __name__ == "__main__":[m
+[32m+[m[32m    app.run(host="127.0.0.1", port=5000, debug=False)[m
